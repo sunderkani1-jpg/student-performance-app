@@ -18,38 +18,30 @@ y = df["final_marks"]
 # Model create & train once
 model = LinearRegression()
 model.fit(X, y)
-st.write("Final Marks Sample:", df["final_marks"].head())
-st.write("Final Marks Max:", df["final_marks"].max())
 
-# ---- USER INPUT ----
 past_semester = st.number_input("Past Semester %")
 attendance = st.number_input("Attendance %")
 study_hours = st.number_input("Study Hours")
 internal_marks = st.number_input("Internal Marks")
+# 🔵 PREDICT BUTTON
+if st.button("Predict"):
 
-# ---- ONE Predict BUTTON ----
+    input_data = pd.DataFrame([{
+        "past_semester_percentage": past_semester/100,
+        "attendance_percentage": attendance/100,
+        "study_hours_per_week": study_hours,
+        "internal_marks": internal_marks
+    }])
 
-import pandas as pd
+    prediction = model.predict(input_data)
 
-input_data = pd.DataFrame([{
-    "past_semester_percentage": past_semester/100,
-    "attendance_percentage": attendance/100,
-    "study_hours_per_week": study_hours,
-    "internal_marks": internal_marks
-}])
+    st.session_state.prediction = prediction[0]
 
-prediction = model.predict(input_data)
+    st.write("Predicted Mark:", prediction[0])
+        
+# 🟢 SHOW GRAPH BUTTON (👇 EXACTLY HERE)
+if st.button("Show Graph") and "prediction" in st.session_state:
 
-st.write("Predicted Mark:", prediction[0])
-    # ----- GRAPH -----
     fig, ax = plt.subplots()
-    ax.bar(["Predicted Marks"], [prediction[0]])
-    ax.set_ylabel("Marks")
-    ax.set_ylim(0, 100)
+    ax.bar(["Prediction"], [st.session_state.prediction])
     st.pyplot(fig)
-
-
-
-
-
-
