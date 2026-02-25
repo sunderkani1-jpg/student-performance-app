@@ -18,6 +18,8 @@ y = df["final_marks"]
 # Model create & train once
 model = LinearRegression()
 model.fit(X, y)
+st.write("Final Marks Sample:", df["final_marks"].head())
+st.write("Final Marks Max:", df["final_marks"].max())
 
 # ---- USER INPUT ----
 past_semester = st.number_input("Past Semester %")
@@ -39,6 +41,7 @@ if st.button("Predict"):
     ax.set_ylabel("Marks")
     ax.set_ylim(0, 100)
     st.pyplot(fig)
+
 
 
 
