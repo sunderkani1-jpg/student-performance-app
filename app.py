@@ -29,18 +29,25 @@ internal_marks = st.number_input("Internal Marks")
 
 # ---- ONE Predict BUTTON ----
 
-if st.button("Predict"):
-    prediction = model.predict([[past_semester/100,
-                                 attendance/100,
-                                 study_hours,
-                                 internal_marks]])
-    st.write("Predicted Mark:", prediction[0])
+import pandas as pd
+
+input_data = pd.DataFrame([{
+    "past_semester_percentage": past_semester/100,
+    "attendance_percentage": attendance/100,
+    "study_hours_per_week": study_hours,
+    "internal_marks": internal_marks
+}])
+
+prediction = model.predict(input_data)
+
+st.write("Predicted Mark:", prediction[0])
     # ----- GRAPH -----
     fig, ax = plt.subplots()
     ax.bar(["Predicted Marks"], [prediction[0]])
     ax.set_ylabel("Marks")
     ax.set_ylim(0, 100)
     st.pyplot(fig)
+
 
 
 
