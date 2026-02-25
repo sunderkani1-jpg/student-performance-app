@@ -26,7 +26,7 @@ study_hours = st.number_input("Study Hours")
 internal_marks = st.number_input("Internal Marks")
 
 # ---- ONE Predict BUTTON ----
-if st.button("Predict"):
+
 if st.button("Predict"):
     prediction = model.predict([[past_semester/100,
                                  attendance/100,
@@ -39,6 +39,7 @@ if st.button("Predict"):
     ax.set_ylabel("Marks")
     ax.set_ylim(0, 100)
     st.pyplot(fig)
+
 
 
 
