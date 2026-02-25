@@ -46,3 +46,20 @@ if st.button("Predict"):
         st.error("Status: At Risk")
     else:
         st.info("Status: Safe")
+              import streamlit as st
+
+# Inputs
+study_hours = st.number_input("Study Hours")
+attendance = st.number_input("Attendance")
+
+# Predict Button
+if st.button("Predict"):
+    prediction = model.predict([[study_hours, attendance]])
+    
+    st.write("Predicted Mark:", prediction[0])
+
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots()
+    ax.bar(["Predicted"], [prediction[0]])
+    st.pyplot(fig)
+
