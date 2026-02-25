@@ -46,9 +46,6 @@ if st.button("Predict"):
         st.error("Status: At Risk")
     else:
         st.info("Status: Safe")
-
-# Predict Button
-if st.button("Predict",key="predict_button_1"):
     prediction = model.predict([[study_hours, attendance]])
     
     st.write("Predicted Mark:", prediction[0])
@@ -57,6 +54,7 @@ if st.button("Predict",key="predict_button_1"):
     fig, ax = plt.subplots()
     ax.bar(["Predicted"], [prediction[0]])
     st.pyplot(fig)
+
 
 
 
