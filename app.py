@@ -38,9 +38,7 @@ if st.button("Predict"):
     st.session_state.prediction = prediction[0]
 
     st.write("Predicted Mark:", prediction[0])
-        
-# 🟢 SHOW GRAPH BUTTON (👇 EXACTLY HERE)
-if st.button("Show Graph") and "prediction" in st.session_state:
+        if st.button("Show Graph") and "prediction" in st.session_state:
 
     fig, ax = plt.subplots()
     ax.bar(["Prediction"], [st.session_state.prediction])
