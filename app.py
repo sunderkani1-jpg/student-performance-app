@@ -5,7 +5,8 @@ from sklearn.linear_model import LinearRegression
 
 # Load data
 df = pd.read_excel("student database final.xlsx")
-
+st.write("Column Names:", df.columns)
+st.write(df.head())
 # Features & target
 X = df[["past_semester_percentage",
         "attendance_percentage",
@@ -40,3 +41,4 @@ if st.button("Predict"):
     ax.set_ylabel("Marks")
     ax.set_ylim(0, 100)
     st.pyplot(fig)
+
