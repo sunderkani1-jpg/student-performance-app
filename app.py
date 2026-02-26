@@ -29,6 +29,10 @@ min_val = 18
 max_val = 95
 inputs = [95, 88, 18, 42]   # neenga kudutha numbers
 normalized_inputs = [(x - min_val)/(max_val - min_val) for x in inputs]
+min_val = 18
+max_val = 95
+inputs = [95, 88, 18, 42]   # neenga kudutha numbers
+normalized_inputs = [(x - min_val)/(max_val - min_val) for x in inputs]
 # ---- PREDICT BUTTON ----
 if st.button("Predict"):
     # Input data in correct scale
@@ -61,3 +65,4 @@ if st.button("Show Graph") and "prediction" in st.session_state:
     ax.set_ylabel("Marks")
     ax.set_title("Predicted Student Performance")
     st.pyplot(fig)
+
