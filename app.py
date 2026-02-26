@@ -21,8 +21,8 @@ model.fit(X, y)  # Train once
 st.title("Student Academic Performance Prediction")
 st.subheader("Enter Student Details")
 
-past_semester = st.number_input("Past Semester % (0–100)")
-attendance = st.number_input("Attendance % (0–100)")
+past_semester = st.number_input("Past Semester % (0/100)")
+attendance = st.number_input("Attendance % (0/100)")
 study_hours = st.number_input("Study Hours per Week")
 internal_marks = st.number_input("Internal Marks (out of 50)")
 
@@ -58,3 +58,4 @@ if st.button("Show Graph") and "prediction" in st.session_state:
     ax.set_ylabel("Marks")
     ax.set_title("Predicted Student Performance")
     st.pyplot(fig)
+
