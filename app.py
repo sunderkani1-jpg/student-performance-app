@@ -1,68 +1,54 @@
-import streamlit as st
-import pandas as pd
-from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 
-# ---- LOAD DATA ----
-df = pd.read_excel("student database final.xlsx")
+# ======= Student Data =======
+# Each student: [Past %, Attendance %, Study Hours/Week, Internal Marks]
+students_data = [
+    [95, 88, 18, 42],
+    [78, 92, 20, 50],
+    [65, 70, 10, 35],
+    [80, 85, 15, 40]
+]
 
-# ---- FEATURES & TARGET ----
-X = df[["past_semester_percentage",
-        "attendance_percentage",
-        "study_hours_per_week",
-        "internal_marks"]]
-y = df["final_marks"]
+# Max marks
+max_marks = 85
 
-# ---- MODEL ----
-model = LinearRegression()
-model.fit(X, y)  # Train once
+# ======= Step 1: Normalize each feature =======
+columns = list(zip(*students_data))
+min_vals = [min(col) for col in columns]
+max_vals = [max(col) for col in columns]
 
-# ---- USER INPUT ----
-st.title("Student Academic Performance Prediction")
-st.subheader("Enter Student Details")
+normalized_data = []
+for row in students_data:
+    norm_row = []
+    for i in range(len(row)):
+        if max_vals[i] - min_vals[i] == 0:
+            norm_val = 0
+        else:
+            norm_val = (row[i] - min_vals[i]) / (max_vals[i] - min_vals[i])
+        norm_row.append(norm_val)
+    normalized_data.append(norm_row)
 
-past_semester = st.number_input("Past Semester % (0–100)")
-attendance = st.number_input("Attendance % (0–100)")
-study_hours = st.number_input("Study Hours per Week")
-internal_marks = st.number_input("Internal Marks (out of 50)")
-min_val = 18
-max_val = 95
-inputs = [95, 88, 18, 42]   # neenga kudutha numbers
-normalized_inputs = [(x - min_val)/(max_val - min_val) for x in inputs]
-min_val = 18
-max_val = 95
-inputs = [95, 88, 18, 42]   # neenga kudutha numbers
-normalized_inputs = [(x - min_val)/(max_val - min_val) for x in inputs]
-# ---- PREDICT BUTTON ----
-if st.button("Predict"):
-    # Input data in correct scale
-    input_data = pd.DataFrame([{
-        "past_semester_percentage": past_semester/100,
-        "attendance_percentage": attendance/100,
-        "study_hours_per_week": study_hours,
-        "internal_marks": internal_marks
-    }])
+# ======= Step 2: Weighted prediction =======
+# Assign weights to features (sum = 1)
+weights = [0.4, 0.2, 0.1, 0.3]  # Past %, Attendance %, Study Hours, Internal Marks
 
-    prediction = model.predict(input_data)
-    st.session_state.prediction = prediction[0]
+predicted_marks = []
+for row in normalized_data:
+    mark = sum([row[i]*weights[i] for i in range(len(row))]) * max_marks
+    predicted_marks.append(mark)
 
-    st.write("### Predicted Final Mark:", round(prediction[0], 2))
+# ======= Step 3: Print results =======
+for i, row in enumerate(students_data):
+    print(f"Student {i+1} Inputs: {row}")
+    print(f"Normalized Inputs: {[round(x,2) for x in normalized_data[i]]}")
+    print(f"Predicted Marks: {predicted_marks[i]:.2f}\n")
 
-    # ---- RISK STATUS ----
-    if prediction[0] >= 70:
-        status = "Low Risk ✅"
-    elif prediction[0] >= 50:
-        status = "Moderate Risk ⚠️"
-    else:
-        status = "High Risk ❌"
-    st.write("### Academic Risk Status:", status)
-
-# ---- SHOW GRAPH BUTTON ----
-if st.button("Show Graph") and "prediction" in st.session_state:
-    fig, ax = plt.subplots()
-    ax.bar(["Predicted Mark"], [st.session_state.prediction], color='skyblue')
-    ax.set_ylim(0, 100)
-    ax.set_ylabel("Marks")
-    ax.set_title("Predicted Student Performance")
-    st.pyplot(fig)
-
+# ======= Step 4: Plot graph =======
+plt.figure(figsize=(10,6))
+student_ids = [f"S{i+1}" for i in range(len(students_data))]
+plt.bar(student_ids, predicted_marks, color='skyblue')
+plt.xlabel("Students")
+plt.ylabel("Predicted Marks")
+plt.title("Predicted Marks with Weighted Features")
+plt.ylim(0, max_marks + 5)
+plt.show()
