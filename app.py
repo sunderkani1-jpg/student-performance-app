@@ -1,29 +1,43 @@
 import matplotlib.pyplot as plt
 
 # ======= Inputs =======
-inputs = [95, 88, 18, 42]  # your input values
-min_val = min(inputs)
-max_val = max(inputs)
+# Each student has 4 features: [Past %, Attendance %, Study Hours/Week, Internal Marks]
+students_data = [
+    [95, 88, 18, 42],   # Example student 1
+    [78, 92, 20, 50],   # Example student 2
+    [65, 70, 10, 35],   # Example student 3
+    [80, 85, 15, 40]    # Example student 4
+]
 
-# ======= Step 1: Normalize inputs =======
-normalized_inputs = [(x - min_val)/(max_val - min_val) for x in inputs]
+# Expected max marks for prediction
+max_marks = 85
 
-# ======= Step 2: Define prediction function =======
-# Example: predicted marks proportional to normalized input
-def predict_marks(normalized_values, max_marks=85):
-    return [x * max_marks for x in normalized_values]
+# ======= Step 1: Normalize each feature =======
+# Find min & max for each column
+columns = list(zip(*students_data))  # transpose to columns
+min_vals = [min(col) for col in columns]
+max_vals = [max(col) for col in columns]
 
-predicted_marks = predict_marks(normalized_inputs)
+normalized_data = []
+for row in students_data:
+    norm_row = [(row[i]-min_vals[i])/(max_vals[i]-min_vals[i]) for i in range(len(row))]
+    normalized_data.append(norm_row)
+
+# ======= Step 2: Predict marks =======
+# Example prediction: average of normalized features scaled to max_marks
+predicted_marks = [sum(row)/len(row) * max_marks for row in normalized_data]
 
 # ======= Step 3: Print results =======
-print("Inputs:", inputs)
-print("Normalized Inputs:", normalized_inputs)
-print("Predicted Marks:", predicted_marks)
+for i, row in enumerate(students_data):
+    print(f"Student {i+1} Inputs: {row}")
+    print(f"Normalized Inputs: {normalized_data[i]}")
+    print(f"Predicted Marks: {predicted_marks[i]:.2f}\n")
 
 # ======= Step 4: Plot graph =======
-plt.figure(figsize=(8,5))
-plt.bar(range(len(inputs)), predicted_marks, tick_label=inputs, color='skyblue')
-plt.xlabel("Input Values")
+plt.figure(figsize=(10,6))
+student_ids = [f"S{i+1}" for i in range(len(students_data))]
+plt.bar(student_ids, predicted_marks, color='skyblue')
+plt.xlabel("Students")
 plt.ylabel("Predicted Marks")
-plt.title("Input vs Predicted Marks")
+plt.title("Predicted Marks based on Past %, Attendance %, Study Hours & Internal Marks")
 plt.show()
