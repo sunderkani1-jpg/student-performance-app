@@ -1,3 +1,5 @@
+import streamlit as st
+st.write("App is loading...")
 import matplotlib.pyplot as plt
 print("Program started")
 
@@ -48,4 +50,5 @@ plt.ylabel("Predicted Marks")
 plt.title("Predicted Marks with Weighted Features & Fixed Ranges")
 plt.ylim(0, max_marks + 5)
 plt.show()
+
 
