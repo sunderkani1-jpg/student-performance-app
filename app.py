@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+print("Program started")
 
 # ======= Student Data =======
 # Each student: [Past %, Attendance %, Study Hours/Week, Internal Marks]
@@ -47,3 +48,4 @@ plt.ylabel("Predicted Marks")
 plt.title("Predicted Marks with Weighted Features & Fixed Ranges")
 plt.ylim(0, max_marks + 5)
 plt.show()
+
